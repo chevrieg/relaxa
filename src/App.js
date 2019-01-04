@@ -5,10 +5,10 @@ import './App.css';
 
 class App extends Component {
   state = {
-    url: 'https://www.youtube.com/watch?v=oUFJJNQGwhk',
+    url: "https://storage.googleapis.com/media-session/elephants-dream/the-wires.mp3",
     pip: false,
     playing: true,
-    volume: 0.0,
+    volume: 0.5,
     muted: false,
     played: 0,
     loaded: 0,
@@ -29,6 +29,15 @@ class App extends Component {
     this.setState({ volume: this.state.volume - 0.1 })
   }
 
+  onDuration = (duration) => {
+    console.log('onDuration', duration)
+    this.setState({ duration })
+  }
+
+  playPause = () => {
+    this.setState({ playing: !this.state.playing })
+  }
+
   render() {
     const { url, playing, volume, muted, loop, played, loaded, duration, playbackRate, pip } = this.state
     return (
@@ -38,8 +47,15 @@ class App extends Component {
           <p>
             Welcome to relaxa. It change over the time !
           </p>
-          <ReactPlayer ref={this.ref} url={url} volume={volume} playing />
+          <ReactPlayer ref={this.ref} 
+                        url={url} 
+                        volume={volume} 
+                        onDuration={this.onDuration}
+                        onProgress={this.onProgress}
+                        playing={playing} />
           <p>loaded: {loaded}, played: {played}, volume: {volume}</p>
+          <p>playing: {playing}, duration: {duration}</p>
+          <button onClick={() => this.playPause()}>Play/Pause</button>
           <button onClick={() => this.volume_up()}>+</button>
           <button onClick={() => this.volume_down()}>-</button>
         </header>
